@@ -59,6 +59,7 @@ if 'current_page' not in st.session_state:
 
 # Page mapping
 PAGES = {
+    "Business Overview": "page0_landing",
     "Data Acquisition": "page1_data_acquisition",
     "Exploratory Data Analysis": "page2_eda",
     "Preprocessing & Feature Engineering": "page3_preprocessing",
@@ -160,20 +161,21 @@ with st.sidebar:
         st.rerun()
     
     st.markdown("<br>", unsafe_allow_html=True)
-
-    # Session State files
-    with st.container():
-        st.markdown("#### Session State Files")
-        st.write(f"Total files: {len(st.session_state.keys())}")
-        for key in st.session_state.keys():
-            st.write(f"- {key}")
+    
+    # Footer
+    st.markdown("""
+        <div style='text-align: center; color: #999; font-size: 0.8rem; margin-top: 2rem;'>
+            <hr style='margin-bottom: 1rem;'>
+            Built with Streamlit<br>
+            © 2024 Webjet Analytics
+        </div>
+    """, unsafe_allow_html=True)
 
 # Main content area
 try:
     # Dynamically import and run the selected page
     page_module = importlib.import_module(PAGES[selected_page])
     page_module.show()
-    
 except Exception as e:
     st.error(f"Error loading page: {str(e)}")
     st.info("Please ensure all page modules are in the same directory as main.py")

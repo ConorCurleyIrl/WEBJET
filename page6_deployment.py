@@ -310,6 +310,7 @@ def calculate_kpis(forecast_df):
 def generate_current_plan(forecast_df):
     """Generate mock current marketing plan."""
     base_spend = 6000
+    dates = forecast_df['date'].values
     return pd.DataFrame({
         'date': forecast_df['date'],
         'spend': base_spend + np.random.normal(0, 500, len(forecast_df))
