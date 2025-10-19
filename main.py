@@ -20,77 +20,45 @@ if st.sidebar.button("🔄 Reset & Restart"):
         del st.session_state[key]
     st.rerun()
 
-# Custom CSS for professional styling
-st.markdown("""
-    <style>
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #1f77b4;
-        margin-bottom: 0.5rem;
-    }
-    .sub-header {
-        font-size: 1.2rem;
-        color: #666;
-        margin-bottom: 2rem;
-    }
-    .stat-card {
-        background-color: #f0f2f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border-left: 4px solid #1f77b4;
-    }
-    .stat-label {
-        font-size: 0.9rem;
-        color: #666;
-        margin-bottom: 0.25rem;
-    }
-    .stat-value {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #1f77b4;
-    }
-    .progress-indicator {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #1f77b4;
-        padding: 0.5rem;
-        background-color: #e8f4f8;
-        border-radius: 0.5rem;
-        text-align: center;
-        margin-bottom: 1rem;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-
 
 # Page mapping
 PAGES = {
-    "Business Case Overview": "page0_landing",
-    "Step 1 - Data Acquisition": "page1_data_acquisition",
-    "Step 2 - Exploratory Data Analysis": "page2_eda",
-    "Step 3 - Preprocessing & Feature Engineering": "page3_preprocessing",
-    "Step 4 - Model Training": "page4_modeling",
-    "Step 5 - Forecasting & Validation": "page5_forecasting",
-    "Step 6 - Business Insights & Deployment": "page6_deployment",
-    "Step 7 - MLOps & Monitoring": "page7_mlops"
+    "Business Case Overview": "page_files.page0_landing",
+    "Step 1 - Data Acquisition": "page_files.page1_data_acquisition",
+    "Step 2 - Exploratory Data Analysis": "page_files.page2_eda",
+    "Step 3 - Preprocessing & Feature Engineering": "page_files.page3_preprocessing",
+    "Step 4 - Model Training": "page_files.page4_modeling",
+    "Step 5 - Forecasting & Validation": "page_files.page5_forecasting",
+    "Step 6 - Business Insights & Deployment": "page_files.page6_deployment",
+    "Step 7 - MLOps & Monitoring": "page_files.page7_mlops"
 }
 
 # Sidebar
 with st.sidebar:
     # App logo and title
-    try:
-        st.image("docs/logo.jpg", use_column_width=True)
-    except:
-        st.markdown("### ✈️")
     st.markdown("""
-        <div style='text-align: center; padding: 1rem 0;'>
-            <h1 style='color: #1f77b4; margin: 0;'>✈️ Webjet</h1>
-            <p style='color: #666; margin: 0.25rem 0 0 0;'>Flight Booking Forecasting</p>
-        </div>
-        <hr style='margin: 1rem 0;'>
+    <style>
+    .main-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    .progress-indicator {
+        font-size: 0.9rem;
+        color: #666;
+        text-align: center;
+        margin-bottom: 1rem;            
+    }
+    </style>
     """, unsafe_allow_html=True)
+    st.markdown("<div class='main-header'>Webjet Flight Booking Forecasting</div>", unsafe_allow_html=True)
+    col1,col2,col3 = st.columns([2, 1, 2])
+    with col2:
+        try:
+            st.image("docs/logo.jpeg", use_column_width=True)
+        except:
+            st.markdown("### ✈️")
     
     # Progress indicator
     page_num = list(PAGES.keys()).index(st.session_state.current_page) + 1

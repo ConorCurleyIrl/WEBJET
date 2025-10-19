@@ -15,21 +15,22 @@ def show():
     """Display executive landing page."""
     
     # Hero Section
-    st.markdown("""
-        <div style='background: linear-gradient(135deg, #e14747 0%, #e14747 100%); 
-                    padding: 3rem 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: center;'>
-            <h1 style='color: white; font-size: 3rem; margin: 0; font-weight: 700;'>
-                Flight Booking Forecasting System
-            </h1>
-            <p style='color: #FFD700; font-size: 1.5rem; margin: 1rem 0 0 0; font-weight: 500;'>
-                Powering Webjet's FY30 Strategy to Double TTV
-            </p>
-            <p style='color: white; font-size: 1.1rem; margin: 1rem 0 0 0; opacity: 0.9;'>
-                AI-Powered Demand Intelligence for Australia & New Zealand's #1 OTA
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
-    
+    with st.container():
+        st.markdown("""
+            <div style='background: linear-gradient(135deg, #e14747 0%, #e14747 100%); 
+                        padding: 3rem 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: center;'>
+                <h1 style='color: white; font-size: 3rem; margin: 0; font-weight: 700;'>
+                    Flight Booking Forecasting System
+                </h1>
+                <p style='color: #FFD700; font-size: 1.5rem; margin: 1rem 0 0 0; font-weight: 500;'>
+                    Powering Webjet's FY30 Strategy to Double TTV
+                </p>
+                <p style='color: white; font-size: 1.1rem; margin: 1rem 0 0 0; opacity: 0.9;'>
+                    AI-Powered Demand Intelligence for Australia & New Zealand's #1 OTA
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+        
     # Executive Summary
     st.markdown("## 🎯 The Strategic Imperative")
     

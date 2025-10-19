@@ -14,7 +14,7 @@ from utils.utils import (
 
 def show():
     """Display the Data Acquisition page."""
-    
+
     # Header
     st.markdown("<h1 class='main-header'>📁 Data Acquisition</h1>", unsafe_allow_html=True)
     st.markdown(
