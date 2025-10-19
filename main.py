@@ -160,15 +160,13 @@ with st.sidebar:
         st.rerun()
     
     st.markdown("<br>", unsafe_allow_html=True)
-    
-    # Footer
-    st.markdown("""
-        <div style='text-align: center; color: #999; font-size: 0.8rem; margin-top: 2rem;'>
-            <hr style='margin-bottom: 1rem;'>
-            Built with Streamlit<br>
-            © 2024 Webjet Analytics
-        </div>
-    """, unsafe_allow_html=True)
+
+    # Session State files
+    with st.container():
+        st.markdown("#### Session State Files")
+        st.write(f"Total files: {len(st.session_state.keys())}")
+        for key in st.session_state.keys():
+            st.write(f"- {key}")
 
 # Main content area
 try:

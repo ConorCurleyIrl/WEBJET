@@ -38,10 +38,6 @@ def show():
     if not check_data_loaded('preprocessed_data'):
         st.warning("⚠️ Please complete preprocessing in Page 3 first.")
         return
-        st.markdown("**Statistical Models**")
-        use_arima = st.checkbox("ARIMA/SARIMA", value=True)
-        use_prophet = st.checkbox("Prophet", value=True)
-        use_ets = st.checkbox("Exponential Smoothing", value=False)
     
     data = load_from_session('preprocessed_data')
     
@@ -56,19 +52,31 @@ def show():
     # 1. Model Selection
     st.subheader("1️⃣ Select Models to Train")
     
-    col2, col3 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     
-    
-    
+    with col1:
+        st.markdown("**Statistical Models**")
+        st.caption("ARIMA is suitable for univariate time series with seasonality. Prophet handles holidays well. ETS captures trend and seasonality.")
+        use_arima = st.checkbox("ARIMA/SARIMA", value=True)
+        st.caption("Prophet is robust to missing data and shifts in the trend.")
+        use_prophet = st.checkbox("Prophet", value=True)
+        st.caption("Exponential Smoothing is effective for data with trend and seasonality.")
+        use_ets = st.checkbox("Exponential Smoothing", value=False)
+
     with col2:
         st.markdown("**ML Models**")
+        st.caption("XGBoost is a powerful gradient boosting algorithm, effective for tabular data.")
         use_xgb = st.checkbox("XGBoost", value=True)
+        st.caption("Random Forest is robust to overfitting and captures non-linear relationships.")
         use_rf = st.checkbox("Random Forest", value=True)
+        st.caption("LightGBM is a fast, efficient gradient boosting framework.")
         use_lgb = st.checkbox("LightGBM", value=True)
     
     with col3:
         st.markdown("**Ensemble**")
+        st.caption("Combine predictions from multiple models to improve accuracy.")
         use_simple_avg = st.checkbox("Simple Average", value=False)
+        st.caption("Weighted average based on model performance.")
         use_weighted_avg = st.checkbox("Weighted Average", value=False)
     
     st.markdown("---")
@@ -78,10 +86,10 @@ def show():
     
     if st.button("🚀 Train Selected Models", type="primary", use_container_width=True):
         models_to_train = []
-        if use_arima: models_to_train.append('ARIMA')
         if use_prophet: models_to_train.append('Prophet')
-        if use_ets: models_to_train.append('ETS')
         if use_xgb: models_to_train.append('XGBoost')
+        if use_arima: models_to_train.append('ARIMA')
+        if use_ets: models_to_train.append('ETS')
         if use_rf: models_to_train.append('Random Forest')
         if use_lgb: models_to_train.append('LightGBM')
         
