@@ -477,67 +477,88 @@ def check_has_exogenous(data):
 # ============================================================================
 # VISUALIZATION FUNCTIONS
 # ============================================================================
-
 def create_forecast_plot(train_data, test_data, forecast_df, conf_intervals):
-    """Create comprehensive forecast visualization."""
+    """Create forecast visualization plot."""
     fig = go.Figure()
     
-    # Historical (train)
+    # Historical training data
     fig.add_trace(go.Scatter(
         x=train_data['date'],
         y=train_data['bookings'],
         mode='lines',
-        name='Historical (Train)',
-        line=dict(color='#1f77b4', width=1.5)
+        name='Training Data',
+        line=dict(color='blue', width=2)
     ))
     
-    # Test
+    # Test data
     fig.add_trace(go.Scatter(
         x=test_data['date'],
         y=test_data['bookings'],
         mode='lines',
-        name='Actual (Test)',
-        line=dict(color='#2ca02c', width=1.5)
+        name='Test Data',
+        line=dict(color='gray', width=2)
     ))
     
-    # Forecast
+    # Forecast - using 'point_forecast' column name
     fig.add_trace(go.Scatter(
         x=forecast_df['date'],
         y=forecast_df['point_forecast'],
         mode='lines',
         name='Forecast',
-        line=dict(color='#ff7f0e', width=2)
+        line=dict(color='red', width=2, dash='dash')
     ))
     
-    # Prediction intervals
-    for conf in sorted(conf_intervals, reverse=True):
-        fig.add_trace(go.Scatter(
-            x=pd.concat([forecast_df['date'], forecast_df['date'][::-1]]),
-            y=pd.concat([forecast_df[f'upper_{conf}'], forecast_df[f'lower_{conf}'][::-1]]),
-            fill='toself',
-            fillcolor=f'rgba(255,127,14,{0.1 + conf/200})',
-            line=dict(color='rgba(255,255,255,0)'),
-            name=f'{conf}% Interval',
-            showlegend=True
-        ))
+    # Add confidence intervals if they exist
+    for conf in conf_intervals:
+        if f'upper_{conf}' in forecast_df.columns and f'lower_{conf}' in forecast_df.columns:
+            # Upper bound
+            fig.add_trace(go.Scatter(
+                x=forecast_df['date'],
+                y=forecast_df[f'upper_{conf}'],
+                mode='lines',
+                line=dict(width=0),
+                showlegend=False,
+                hoverinfo='skip'
+            ))
+            
+            # Lower bound with fill
+            fig.add_trace(go.Scatter(
+                x=forecast_df['date'],
+                y=forecast_df[f'lower_{conf}'],
+                mode='lines',
+                fill='tonexty',
+                line=dict(width=0),
+                name=f'{conf}% Confidence',
+                fillcolor=f'rgba(255,0,0,{0.1 + conf/1000})',
+                hoverinfo='skip'
+            ))
     
-    # Boundary lines
-    fig.add_vline(
-        x=test_data['date'].iloc[0],
-        line_dash="dash",
-        line_color="gray",
-        annotation_text="Train/Test Split"
+    # Add vertical line at forecast start using add_shape instead of add_vline
+    forecast_start = forecast_df['date'].iloc[0]
+    
+    fig.add_shape(
+        type="line",
+        x0=forecast_start,
+        x1=forecast_start,
+        y0=0,
+        y1=1,
+        yref="paper",
+        line=dict(color="green", width=2, dash="dot"),
     )
     
-    fig.add_vline(
-        x=forecast_df['date'].iloc[0],
-        line_dash="dash",
-        line_color="red",
-        annotation_text="Forecast Start"
+    # Add annotation for the vertical line
+    fig.add_annotation(
+        x=forecast_start,
+        y=1.02,
+        yref="paper",
+        text="Forecast Start",
+        showarrow=False,
+        font=dict(color="green"),
+        xanchor="center"
     )
     
     fig.update_layout(
-        title='Forecast with Prediction Intervals',
+        title='Flight Booking Forecast',
         xaxis_title='Date',
         yaxis_title='Bookings',
         height=500,
@@ -546,7 +567,6 @@ def create_forecast_plot(train_data, test_data, forecast_df, conf_intervals):
     )
     
     return fig
-
 
 def create_backtest_plot(backtest_results):
     """Create backtest visualization."""

@@ -23,14 +23,14 @@ if st.sidebar.button("🔄 Reset & Restart"):
 
 # Page mapping
 PAGES = {
-    "Business Case Overview": "page_files.page0_landing",
-    "Step 1 - Data Acquisition": "page_files.page1_data_acquisition",
-    "Step 2 - Exploratory Data Analysis": "page_files.page2_eda",
-    "Step 3 - Preprocessing & Feature Engineering": "page_files.page3_preprocessing",
-    "Step 4 - Model Training": "page_files.page4_modeling",
-    "Step 5 - Forecasting & Validation": "page_files.page5_forecasting",
-    "Step 6 - Business Insights & Deployment": "page_files.page6_deployment",
-    "Step 7 - MLOps & Monitoring": "page_files.page7_mlops"
+    "Business Case Overview": "page0_landing",
+    "Step 1 - Data Acquisition": "page1_data_acquisition",
+    "Step 2 - Exploratory Data Analysis": "page2_eda",
+    "Step 3 - Preprocessing & Feature Engineering": "page3_preprocessing",
+    "Step 4 - Model Training": "page4_modeling",
+    "Step 5 - Forecasting & Validation": "page5_forecasting",
+    "Step 6 - Business Insights & Deployment": "page6_deployment",
+    "Step 7 - MLOps & Monitoring": "page7_mlops"
 }
 
 # Sidebar
@@ -152,11 +152,13 @@ with st.sidebar:
 
 # Main content area
 try:
-    page_module = importlib.import_module(PAGES[selected_page])
+    page_module = importlib.import_module(f".{PAGES[selected_page]}", package="page_files")
     page_module.show()
 except ImportError as e:
     st.error(f"⚠️ Page module not found: {PAGES[selected_page]}.py")
-    st.info("Please ensure all page files are in the same directory.")
+    st.info("Please ensure all page files are in the page_files/ directory.")
+    if st.checkbox("Show technical details"):
+        st.exception(e)
 except Exception as e:
     st.error(f"❌ An error occurred: {str(e)}")
     st.warning("Try refreshing the page or clicking 'Reset All' in the sidebar.")

@@ -1,4 +1,4 @@
-from streamlit import st
+import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
@@ -69,27 +69,28 @@ def generate_synthetic_data(start_date='2022-09-01', end_date='2025-09-30', seed
     covid_impact[covid_mask] = covid_recovery
     
     # 5. SCHOOL HOLIDAYS (AU/NZ calendar)
-    # Approximate school holiday periods
+    # 5. SCHOOL HOLIDAYS (AU/NZ calendar) - Enhanced boost
     school_holidays = []
     for year in range(2021, 2025):
         school_holidays.extend([
-            (f'{year}-01-01', f'{year}-02-05'),  # Summer holidays
-            (f'{year}-04-01', f'{year}-04-18'),  # Autumn break
-            (f'{year}-06-24', f'{year}-07-10'),  # Winter break
-            (f'{year}-09-23', f'{year}-10-09'),  # Spring break
-            (f'{year}-12-15', f'{year}-12-31'),  # Christmas break
+            (f'{year}-01-01', f'{year}-02-05', 1.35),  # Summer holidays - peak
+            (f'{year}-04-01', f'{year}-04-18', 1.20),  # Autumn break
+            (f'{year}-06-24', f'{year}-07-10', 1.30),  # Winter break - ski season
+            (f'{year}-09-23', f'{year}-10-09', 1.15),  # Spring break
+            (f'{year}-12-15', f'{year}-12-31', 1.40),  # Christmas break - peak
         ])
-    
+
     df['is_school_holiday'] = False
-    for start, end in school_holidays:
+    df['holiday_boost_factor'] = 1.0
+    for start, end, boost in school_holidays:
         try:
             mask = (df['date'] >= start) & (df['date'] <= end)
             df.loc[mask, 'is_school_holiday'] = True
+            df.loc[mask, 'holiday_boost_factor'] = boost
         except:
             pass
-    
-    school_holiday_boost = np.where(df['is_school_holiday'], 1.25, 1.0)
-    
+
+    school_holiday_boost = df['holiday_boost_factor'].values
     # 6. PUBLIC HOLIDAYS (simplified)
     public_holidays = []
     for year in range(2021, 2025):
@@ -127,18 +128,33 @@ def generate_synthetic_data(start_date='2022-09-01', end_date='2025-09-30', seed
     df['bookings'] = np.round(bookings).astype(int)
     
     # 10. GENERATE EXOGENOUS VARIABLES
-    
-    # Marketing spend (correlated with bookings + seasonality)
+    # Marketing spend by channel (correlated with bookings + seasonality)
     base_marketing = 6000
     marketing_seasonality = 1 + 0.2 * np.sin(2 * np.pi * df['day_of_year'] / 365)
     marketing_trend = base_marketing + (days_from_start / 365) * 500
+
+    # Total marketing spend
     df['marketing_spend'] = (
         marketing_trend * 
         marketing_seasonality * 
         np.random.normal(1.0, 0.15, n_days)
     )
+
+    # Channel breakdown (percentages that sum to 1)
+    channel_mix = np.random.dirichlet([3, 2, 1.5, 1, 0.5], n_days)  # Weighted toward search/social
+    df['marketing_search'] = df['marketing_spend'] * channel_mix[:, 0]
+    df['marketing_social'] = df['marketing_spend'] * channel_mix[:, 1]
+    df['marketing_display'] = df['marketing_spend'] * channel_mix[:, 2]
+    df['marketing_email'] = df['marketing_spend'] * channel_mix[:, 3]
+    df['marketing_affiliate'] = df['marketing_spend'] * channel_mix[:, 4]
+
     df['marketing_spend'] = np.round(df['marketing_spend'], 2)
-    
+    df['marketing_search'] = np.round(df['marketing_search'], 2)
+    df['marketing_social'] = np.round(df['marketing_social'], 2)
+    df['marketing_display'] = np.round(df['marketing_display'], 2)
+    df['marketing_email'] = np.round(df['marketing_email'], 2)
+    df['marketing_affiliate'] = np.round(df['marketing_affiliate'], 2)
+        
     # Competitor price index (inverse correlation with bookings)
     base_price_index = 100
     price_volatility = np.random.normal(0, 5, n_days).cumsum()
@@ -161,14 +177,19 @@ def generate_synthetic_data(start_date='2022-09-01', end_date='2025-09-30', seed
     
     # 12. SELECT AND ORDER FINAL COLUMNS
     final_columns = [
-        'date',
-        'bookings',
-        'day_of_week',
-        'marketing_spend',
-        'competitor_price_index',
-        'is_holiday',
-        'is_school_holiday',
-        'weather_disruption_index'
+    'date',
+    'bookings',
+    'day_of_week',
+    'marketing_spend',
+    'marketing_search',
+    'marketing_social',
+    'marketing_display',
+    'marketing_email',
+    'marketing_affiliate',
+    'competitor_price_index',
+    'is_holiday',
+    'is_school_holiday',
+    'weather_disruption_index'
     ]
     
     df = df[final_columns]

@@ -11,7 +11,10 @@ from plotly.subplots import make_subplots
 from scipy.stats import ks_2samp, ttest_ind
 from statsmodels.stats.diagnostic import acorr_ljungbox
 from datetime import datetime, timedelta
-from utils import save_to_session, load_from_session
+
+# Utility functions
+
+from utils.utils import save_to_session, load_from_session
 
 
 def show():
@@ -361,11 +364,19 @@ def create_drift_histogram(train_data, test_data, feature):
     
     return fig
 
-
 def detect_concept_drift(residuals):
     """Detect concept drift in residuals."""
-    result = acorr_ljungbox(residuals, lags=[10], return_df=False)
-    return result[1][0] < 0.05
+    result = acorr_ljungbox(residuals, lags=[10], return_df=True)
+    
+    # Handle both DataFrame and tuple returns
+    if isinstance(result, pd.DataFrame):
+        # Newer statsmodels versions return DataFrame
+        p_value = result['lb_pvalue'].iloc[0]
+    else:
+        # Older versions return tuple
+        p_value = result[1][0]
+    
+    return p_value < 0.05
 
 
 def create_concept_drift_chart(dates, residuals):

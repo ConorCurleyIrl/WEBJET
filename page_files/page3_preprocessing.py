@@ -24,6 +24,114 @@ def show():
     if not check_data_loaded('data'):
         return
     
+    # Initialize session state
+    if 'working_data' not in st.session_state:
+        st.session_state.working_data = load_from_session('data').copy()
+    
+    tab1, tab2 = st.tabs(["🚀 Quick Demo", "⚙️ Advanced Configuration"])
+    
+    with tab1:
+        show_demo_mode()
+    
+    with tab2:
+        show_advanced_mode()
+
+
+def show_demo_mode():
+    """One-click preprocessing with best defaults."""
+    st.markdown("### ✨ Auto-Apply Best Practices")
+    st.info("Apply industry-standard preprocessing in one click. Perfect for quick demos and MVPs.")
+    
+    data = st.session_state.working_data.copy()
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        st.markdown("""
+        **What will be applied:**
+        - ✅ 80/20 train/test split (time-based)
+        - ✅ Temporal features (day of week, month, quarter, weekend indicator)
+        - ✅ Lag features (1, 7, 14, 30 days)
+        - ✅ Rolling averages (7, 14, 30 day windows)
+        - ✅ Missing value imputation
+        """)
+    
+    with col2:
+        if st.button("🎯 Apply Auto-Preprocessing", type="primary", use_container_width=True, key="demo_apply"):
+            with st.spinner("Processing..."):
+                # 1. Train/test split
+                train_data, test_data, split_date = train_test_split_timeseries(data, 0.2)
+                
+                # 2. Temporal features
+                temporal_features = {
+                    'day_of_week': True,
+                    'month': True,
+                    'quarter': True,
+                    'is_weekend': True,
+                    'day_of_year': True,
+                    'week_of_year': True
+                }
+                data = create_temporal_features(data, temporal_features)
+                
+                # 3. Lag features
+                data = create_lag_features(data, 'bookings', [1, 7, 14, 30])
+                
+                # 4. Rolling features
+                stats_dict = {'mean': True, 'std': True, 'min': False, 'max': False}
+                data = create_rolling_features(data, 'bookings', [7, 14, 30], stats_dict)
+                
+                # 5. Handle missing values
+                lag_rolling_cols = [c for c in data.columns if 'lag_' in c or 'rolling_' in c]
+                data = data.dropna(subset=lag_rolling_cols)
+                
+                # Update splits with new features
+                split_index = int(len(data) * 0.8)
+                train_data = data.iloc[:split_index].copy()
+                test_data = data.iloc[split_index:].copy()
+                
+                # Save
+                st.session_state.working_data = data
+                save_to_session('preprocessed_data', data)
+                save_to_session('train_data', train_data)
+                save_to_session('test_data', test_data)
+                save_to_session('split_date', test_data['date'].iloc[0])
+                
+                st.success("✅ Auto-preprocessing complete!")
+                st.rerun()
+    
+    # Show results if processed
+    if 'preprocessed_data' in st.session_state:
+        st.markdown("---")
+        st.subheader("📊 Results")
+        
+        train_data = load_from_session('train_data')
+        test_data = load_from_session('test_data')
+        processed_data = load_from_session('preprocessed_data')
+        
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Total Features", processed_data.shape[1])
+        col2.metric("Training Samples", len(train_data))
+        col3.metric("Test Samples", len(test_data))
+        
+        st.dataframe(processed_data.head(10), use_container_width=True)
+        
+        col1, col2 = st.columns(2)
+        with col2:
+            if st.button("➡️ Proceed to Modeling", type="primary", use_container_width=True):
+                st.session_state.current_page = "Step 4 - Model Training"
+                st.rerun()
+
+
+def show_advanced_mode():
+    """Display the Data Preprocessing & Feature Engineering page."""
+    
+    st.markdown("<h1 class='main-header'>🔧 Data Preprocessing & Feature Engineering</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Transform raw data into model-ready features</p>", unsafe_allow_html=True)
+    st.markdown("---")
+    
+    if not check_data_loaded('data'):
+        return
+    
     # Initialize session state for processed data
     if 'working_data' not in st.session_state:
         st.session_state.working_data = load_from_session('data').copy()
@@ -368,8 +476,9 @@ def create_split_timeline(data, split_date):
         fillcolor='rgba(255, 152, 0, 0.1)'
     ))
     
+     
     fig.add_vline(
-        x=split_date,
+        x=pd.Timestamp(split_date).strftime('%Y-%m-%d'),
         line_dash="dash",
         line_color="red",
         annotation_text="Split Point",

@@ -655,15 +655,42 @@ def create_feature_importance_plot(importances, feature_names):
 
 def ljung_box_test(residuals, lags=10):
     """Perform Ljung-Box test for autocorrelation."""
-    result = acorr_ljungbox(residuals, lags=lags, return_df=False)
-    return {'statistic': result[0][-1], 'p_value': result[1][-1]}
-
-
+    result = acorr_ljungbox(residuals, lags=lags, return_df=True)
+    
+    # Handle both DataFrame and tuple returns
+    if isinstance(result, pd.DataFrame):
+        # Newer statsmodels versions return DataFrame
+        return {
+            'statistic': result['lb_stat'].iloc[-1], 
+            'p_value': result['lb_pvalue'].iloc[-1]
+        }
+    else:
+        # Older versions return tuple
+        return {'statistic': result[0][-1], 'p_value': result[1][-1]}
 def recommend_best_model(results_df):
     """Recommend best model based on weighted criteria."""
+    if len(results_df) == 1:
+        # If only one model, return it directly
+        best_idx = results_df.index[0]
+        best_rmse = results_df.loc[best_idx, 'test_rmse']
+        best_time = results_df.loc[best_idx, 'time_s']
+        rationale = f"Only model trained - RMSE: {best_rmse:.2f}, Time: {best_time:.2f}s"
+        return {'model': best_idx, 'rationale': rationale}
+    
     # Normalize metrics (0-1 scale, lower is better for RMSE/time)
-    norm_rmse = 1 - (results_df['test_rmse'] - results_df['test_rmse'].min()) / (results_df['test_rmse'].max() - results_df['test_rmse'].min())
-    norm_time = 1 - (results_df['time_s'] - results_df['time_s'].min()) / (results_df['time_s'].max() - results_df['time_s'].min() + 0.01)
+    rmse_range = results_df['test_rmse'].max() - results_df['test_rmse'].min()
+    time_range = results_df['time_s'].max() - results_df['time_s'].min()
+    
+    # Handle case where all values are the same
+    if rmse_range == 0:
+        norm_rmse = pd.Series(1.0, index=results_df.index)
+    else:
+        norm_rmse = 1 - (results_df['test_rmse'] - results_df['test_rmse'].min()) / rmse_range
+    
+    if time_range == 0:
+        norm_time = pd.Series(1.0, index=results_df.index)
+    else:
+        norm_time = 1 - (results_df['time_s'] - results_df['time_s'].min()) / time_range
     
     # Weighted score (50% RMSE, 20% time, 30% dummy for residuals)
     scores = 0.5 * norm_rmse + 0.2 * norm_time + 0.3 * 0.5
@@ -675,7 +702,6 @@ def recommend_best_model(results_df):
     rationale = f"Best test RMSE ({best_rmse:.2f}) with acceptable training time ({best_time:.2f}s)"
     
     return {'model': best_idx, 'rationale': rationale}
-
 
 if __name__ == "__main__":
     show()

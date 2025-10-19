@@ -193,9 +193,59 @@ def show():
     
     st.markdown("---")
     
-    # 8. Key Insights Summary
-    st.subheader("8️⃣ Key Insights Summary")
-    
+    # 8. Marketing Performance Insights
+    st.subheader("8️⃣ Marketing Performance Insights")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        # Channel effectiveness
+        if all(col in data.columns for col in ['marketing_search', 'marketing_social', 'marketing_display']):
+            channels = ['marketing_search', 'marketing_social', 'marketing_display', 
+                    'marketing_email', 'marketing_affiliate']
+            channel_spend = data[channels].sum()
+            
+            fig_channels = go.Figure(go.Bar(
+                x=['Search', 'Social', 'Display', 'Email', 'Affiliate'],
+                y=channel_spend.values,
+                marker_color=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+            ))
+            fig_channels.update_layout(
+                title='Marketing Spend by Channel',
+                yaxis_title='Total Spend ($)',
+                height=300,
+                template='plotly_white'
+            )
+            st.plotly_chart(fig_channels, use_container_width=True)
+
+    with col2:
+        # ROI heatmap by day of week
+        data_copy = data.copy()
+        data_copy['day_name'] = data_copy['date'].dt.day_name()
+        day_performance = data_copy.groupby('day_name')['bookings'].mean().reindex(
+            ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        )
+        
+        fig_days = go.Figure(go.Bar(
+            x=day_performance.index,
+            y=day_performance.values,
+            marker_color=['#e8f5e9' if x < day_performance.mean() else '#00c853' 
+                        for x in day_performance.values]
+        ))
+        fig_days.update_layout(
+            title='Avg Bookings by Day (Target High Days)',
+            yaxis_title='Avg Bookings',
+            height=300,
+            template='plotly_white'
+        )
+        st.plotly_chart(fig_days, use_container_width=True)
+
+    st.markdown("---")
+
+    # 9. Key Insights Summary
+    st.subheader("9️⃣ Marketing Insights Summary")
+
+        
     insights = generate_key_insights(data, adf_result, outliers_df)
     
     for insight in insights:
