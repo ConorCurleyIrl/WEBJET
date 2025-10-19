@@ -1,0 +1,334 @@
+# Installation & Setup Guide
+
+## 📦 Complete Installation Steps
+
+### Step 1: Create Project Directory
+
+```bash
+# Create and navigate to project folder
+mkdir webjet_forecasting
+cd webjet_forecasting
+```
+
+### Step 2: Create All Required Files
+
+Create the following files in your project directory. You can copy the code from the artifacts provided:
+
+#### Core Files (Required)
+1. **main.py** - Main application file
+2. **data_generator.py** - Synthetic data generation
+3. **utils.py** - Utility functions
+4. **requirements.txt** - Python dependencies
+
+#### Page Files (Required)
+5. **page1_data_acquisition.py** - Data loading page
+6. **page2_eda.py** - EDA page (placeholder)
+7. **page3_preprocessing.py** - Preprocessing page (placeholder)
+8. **page4_modeling.py** - Modeling page (placeholder)
+9. **page5_forecasting.py** - Forecasting page (placeholder)
+10. **page6_deployment.py** - Deployment page (placeholder)
+11. **page7_mlops.py** - MLOps page (placeholder)
+
+#### Optional Helper Files
+12. **setup_pages.py** - Auto-generate placeholder pages
+13. **README.md** - Project documentation
+14. **INSTALLATION.md** - This file
+
+### Step 3: Quick File Creation (Two Methods)
+
+#### Method A: Using setup_pages.py (Recommended)
+
+1. Create only these 4 core files manually:
+   - `main.py`
+   - `data_generator.py`
+   - `utils.py`
+   - `requirements.txt`
+   - `page1_data_acquisition.py`
+
+2. Create `setup_pages.py` (from artifact)
+
+3. Run the setup script:
+```bash
+python setup_pages.py
+```
+
+This will automatically create all placeholder pages (page2-7).
+
+#### Method B: Manual Creation
+
+Create each page file (page2-7) individually using the template provided in the "Placeholder Pages" artifact.
+
+### Step 4: Set Up Python Environment
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On macOS/Linux:
+source venv/bin/activate
+
+# On Windows:
+venv\Scripts\activate
+```
+
+### Step 5: Install Dependencies
+
+```bash
+# Install all required packages
+pip install -r requirements.txt
+
+# This will install:
+# - streamlit
+# - pandas
+# - numpy
+# - plotly
+# - scipy
+# - statsmodels
+# - scikit-learn
+# - xgboost
+# - lightgbm
+# - prophet
+# - matplotlib
+# - seaborn
+```
+
+**Note:** Installation may take 5-10 minutes depending on your system.
+
+### Step 6: Verify Installation
+
+Check that all files are present:
+
+```bash
+# List all Python files
+ls -la *.py
+
+# Expected output:
+# main.py
+# data_generator.py
+# utils.py
+# page1_data_acquisition.py
+# page2_eda.py
+# page3_preprocessing.py
+# page4_modeling.py
+# page5_forecasting.py
+# page6_deployment.py
+# page7_mlops.py
+# setup_pages.py (optional)
+```
+
+### Step 7: Test the Application
+
+```bash
+# Run the Streamlit app
+streamlit run main.py
+```
+
+The application should open in your browser at `http://localhost:8501`
+
+## ✅ Verification Checklist
+
+After installation, verify the following:
+
+- [ ] Virtual environment is activated
+- [ ] All dependencies installed successfully
+- [ ] All 11 .py files are present
+- [ ] Streamlit app launches without errors
+- [ ] Can navigate to all 7 pages using sidebar
+- [ ] Page 1 (Data Acquisition) is fully functional
+- [ ] Can generate synthetic data
+- [ ] Can view data preview and statistics
+- [ ] Quick stats appear in sidebar after loading data
+
+## 🧪 Testing Phase 1 Features
+
+### Test 1: Generate Synthetic Data
+
+1. Navigate to "Data Acquisition" page
+2. Select "Generate Synthetic Data"
+3. Keep default dates (2021-01-01 to 2024-01-31)
+4. Click "Generate Data"
+5. ✅ Should see: "Successfully generated 1,126 rows of data!"
+
+### Test 2: Data Preview
+
+1. After generating data, scroll down
+2. ✅ Should see: Data preview table with 20 rows
+3. ✅ Should see: 8 columns (date, bookings, day_of_week, etc.)
+
+### Test 3: Summary Statistics
+
+1. Check the 4 summary cards
+2. ✅ Should show: Total Observations (~1,126)
+3. ✅ Should show: Date Range (1,126 days)
+4. ✅ Should show: Missing Values (a small number)
+5. ✅ Should show: Outliers Detected (10-20)
+
+### Test 4: Data Visualization
+
+1. View the "Quick Visualization" chart
+2. ✅ Should see: Line chart with bookings over time
+3. ✅ Should see: COVID dip around 2020-2021
+4. ✅ Should see: Recovery trend after 2021
+
+### Test 5: Data Quality Checks
+
+1. Review the quality check section
+2. ✅ Should show: "No Duplicate Dates" badge (green)
+3. ✅ Should show: "Continuous Date Range" badge (green)
+4. ✅ Should show: Outlier count (yellow badge)
+
+### Test 6: Sidebar Stats
+
+1. After loading data, check the sidebar
+2. ✅ Should show: "Step 1 / 7" progress indicator
+3. ✅ Should show: Date range in quick stats
+4. ✅ Should show: Observations count
+5. ✅ Should show: Avg daily bookings
+6. ✅ Should show: Total bookings
+
+### Test 7: Navigation
+
+1. Click "Proceed to EDA" button
+2. ✅ Should navigate to Page 2
+3. ✅ Should show: "This page will be implemented in Phase 2" message
+4. Use sidebar to navigate back to Page 1
+5. ✅ Should retain the loaded data
+
+### Test 8: Reset Functionality
+
+1. Click "Reset All" button in sidebar
+2. ✅ Should clear all data
+3. ✅ Should show: "All data cleared!" message
+4. ✅ Quick stats should disappear
+
+### Test 9: Upload CSV (Optional)
+
+1. Export data using "Download Data as CSV" button
+2. Click "Reset All"
+3. Select "Upload CSV File"
+4. Upload the downloaded CSV
+5. ✅ Should load successfully
+
+## 🐛 Common Issues & Solutions
+
+### Issue 1: Module Import Error
+
+**Error:** `ModuleNotFoundError: No module named 'streamlit'`
+
+**Solution:**
+```bash
+# Ensure virtual environment is activated
+source venv/bin/activate  # macOS/Linux
+# or
+venv\Scripts\activate  # Windows
+
+# Reinstall requirements
+pip install -r requirements.txt
+```
+
+### Issue 2: Prophet Installation Fails
+
+**Error:** Issues installing `prophet`
+
+**Solution:**
+```bash
+# On macOS (if you have conda):
+conda install -c conda-forge prophet
+
+# Or skip prophet for now:
+# Comment out prophet in requirements.txt
+# (It's only needed for Phase 3)
+```
+
+### Issue 3: Page Not Found Error
+
+**Error:** `Error loading page: No module named 'page2_eda'`
+
+**Solution:**
+```bash
+# Ensure all page files exist
+ls -la page*.py
+
+# If missing, run setup script:
+python setup_pages.py
+
+# Or create placeholder pages manually
+```
+
+### Issue 4: Streamlit Won't Start
+
+**Error:** `streamlit: command not found`
+
+**Solution:**
+```bash
+# Install streamlit explicitly
+pip install streamlit
+
+# Or use python -m streamlit
+python -m streamlit run main.py
+```
+
+### Issue 5: Data Not Persisting Between Pages
+
+**Issue:** Data disappears when navigating
+
+**Solution:**
+- This is normal if you refresh the browser
+- Streamlit session state resets on refresh
+- Use the navigation buttons, not browser refresh
+- Or regenerate data on Page 1
+
+### Issue 6: Port Already in Use
+
+**Error:** `Address already in use`
+
+**Solution:**
+```bash
+# Use a different port
+streamlit run main.py --server.port 8502
+
+# Or kill the existing process
+# On macOS/Linux:
+lsof -ti:8501 | xargs kill
+
+# On Windows:
+netstat -ano | findstr :8501
+taskkill /PID <PID> /F
+```
+
+## 🎯 Next Steps After Installation
+
+Once Phase 1 is verified:
+
+1. **Familiarize yourself** with the app structure
+2. **Explore the code** in each file
+3. **Customize** data generation parameters if needed
+4. **Wait for Phase 2** implementation (EDA & Preprocessing)
+
+## 📚 Additional Resources
+
+- **Streamlit Docs:** https://docs.streamlit.io
+- **Plotly Docs:** https://plotly.com/python/
+- **Pandas Docs:** https://pandas.pydata.org/docs/
+
+## 💡 Pro Tips
+
+1. **Keep the app running** during development - Streamlit auto-reloads on file changes
+2. **Use st.write()** for debugging - it displays any Python object
+3. **Check st.session_state** in sidebar to see what data is stored
+4. **Use @st.cache_data** decorator to cache expensive computations
+5. **Clear cache** with 'c' key if data seems stale
+
+## ✨ You're Ready!
+
+If all tests pass, you have successfully installed Phase 1 of the Webjet Flight Booking Forecasting App!
+
+🎉 **Congratulations!** The foundation is complete and ready for Phase 2 development.
+
+---
+
+**Need Help?**
+- Check the README.md for detailed documentation
+- Review individual file docstrings
+- Refer back to the specification document
