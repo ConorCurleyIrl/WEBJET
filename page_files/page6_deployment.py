@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from utils import save_to_session, load_from_session
+from utils.utils import save_to_session, load_from_session
 
 
 def show():

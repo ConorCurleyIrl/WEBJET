@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import load_from_session, save_to_session
+from utils.utils import load_from_session, save_to_session
 import importlib
 
 # Page configuration
@@ -9,6 +9,16 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Initialize session state defaults
+if 'current_page' not in st.session_state:
+    st.session_state.current_page = "Business Overview"
+
+# Prevent stale data crashes
+if st.sidebar.button("🔄 Reset & Restart"):
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+    st.rerun()
 
 # Custom CSS for professional styling
 st.markdown("""
@@ -59,19 +69,20 @@ if 'current_page' not in st.session_state:
 
 # Page mapping
 PAGES = {
-    "Business Overview": "page0_landing",
-    "Data Acquisition": "page1_data_acquisition",
-    "Exploratory Data Analysis": "page2_eda",
-    "Preprocessing & Feature Engineering": "page3_preprocessing",
-    "Model Training": "page4_modeling",
-    "Forecasting & Validation": "page5_forecasting",
-    "Business Insights & Deployment": "page6_deployment",
-    "MLOps & Monitoring": "page7_mlops"
+    "Business Case Overview": "page0_landing",
+    "Step 1 - Data Acquisition": "page1_data_acquisition",
+    "Step 2 - Exploratory Data Analysis": "page2_eda",
+    "Step 3 - Preprocessing & Feature Engineering": "page3_preprocessing",
+    "Step 4 - Model Training": "page4_modeling",
+    "Step 5 - Forecasting & Validation": "page5_forecasting",
+    "Step 6 - Business Insights & Deployment": "page6_deployment",
+    "Step 7 - MLOps & Monitoring": "page7_mlops"
 }
 
 # Sidebar
 with st.sidebar:
     # App logo and title
+    st.image("docs/logo.jpg", use_column_width=True)
     st.markdown("""
         <div style='text-align: center; padding: 1rem 0;'>
             <h1 style='color: #1f77b4; margin: 0;'>✈️ Webjet</h1>
@@ -166,16 +177,19 @@ with st.sidebar:
     st.markdown("""
         <div style='text-align: center; color: #999; font-size: 0.8rem; margin-top: 2rem;'>
             <hr style='margin-bottom: 1rem;'>
-            Built with Streamlit<br>
-            © 2024 Webjet Analytics
+            Built by Conor Curley (<a href='https://www.conorcurley.com' target='_blank'>Website</a> | <a href='https://www.linkedin.com/in/conor-curley/' target='_blank'>LinkedIn</a>)
         </div>
     """, unsafe_allow_html=True)
 
 # Main content area
 try:
-    # Dynamically import and run the selected page
     page_module = importlib.import_module(PAGES[selected_page])
     page_module.show()
+except ImportError as e:
+    st.error(f"⚠️ Page module not found: {PAGES[selected_page]}.py")
+    st.info("Please ensure all page files are in the same directory.")
 except Exception as e:
-    st.error(f"Error loading page: {str(e)}")
-    st.info("Please ensure all page modules are in the same directory as main.py")
+    st.error(f"❌ An error occurred: {str(e)}")
+    st.warning("Try refreshing the page or clicking 'Reset All' in the sidebar.")
+    if st.checkbox("Show technical details"):
+        st.exception(e)

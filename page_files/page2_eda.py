@@ -15,7 +15,7 @@ from statsmodels.tsa.stattools import adfuller, kpss
 from scipy import stats
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils import check_data_loaded, save_to_session, load_from_session
+from utils.utils import check_data_loaded, save_to_session, load_from_session
 
 
 def show():
@@ -253,7 +253,7 @@ def create_interactive_time_series(data):
     
     return fig
 
-
+@st.cache_data
 def perform_stl_decomposition(data, model='additive'):
     """Perform STL decomposition and return matplotlib figure."""
     # Prepare data
@@ -431,7 +431,7 @@ def create_qq_plot(data):
 
 def detect_and_plot_outliers(data, method, threshold):
     """Detect outliers and create scatter plot."""
-    from utils import detect_outliers
+    from utils.utils import detect_outliers
     
     # Detect outliers
     method_map = {'Z-score': 'zscore', 'IQR': 'iqr'}

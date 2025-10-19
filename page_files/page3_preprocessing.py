@@ -11,7 +11,7 @@ from plotly.subplots import make_subplots
 from scipy import stats
 from scipy.special import boxcox
 from statsmodels.tsa.stattools import adfuller
-from utils import check_data_loaded, save_to_session, load_from_session
+from utils.utils import check_data_loaded, save_to_session, load_from_session
 
 
 def show():

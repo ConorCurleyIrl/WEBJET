@@ -25,7 +25,7 @@ from scipy import stats
 import xgboost as xgb
 import lightgbm as lgb
 
-from utils import check_data_loaded, save_to_session, load_from_session
+from utils.utils import check_data_loaded, save_to_session, load_from_session
 
 
 def show():
@@ -250,7 +250,7 @@ def show():
 # ============================================================================
 # TRAINING FUNCTIONS
 # ============================================================================
-
+@st.cache_data
 def train_all_models(train_data, test_data, models_to_train):
     """Train all selected models and return results."""
     results = {}

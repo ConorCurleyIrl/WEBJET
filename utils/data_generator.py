@@ -1,7 +1,10 @@
+from streamlit import st
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 
+
+@st.cache_data(ttl=3600)  # Cache for 1 hour
 def generate_synthetic_data(start_date='2022-09-01', end_date='2025-09-30', seed=42):
     """
     Generate realistic daily flight booking data for Webjet.

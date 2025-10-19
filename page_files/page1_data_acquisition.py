@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime
-from data_generator import generate_synthetic_data
-from utils import (
+from utils.data_generator import generate_synthetic_data
+from utils.utils import (
     save_to_session,
     load_from_session,
     validate_data_quality,

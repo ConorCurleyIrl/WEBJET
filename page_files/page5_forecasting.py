@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from datetime import timedelta
-from utils import check_data_loaded, save_to_session, load_from_session
+from utils.utils import check_data_loaded, save_to_session, load_from_session
 
 
 def show():

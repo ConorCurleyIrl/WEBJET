@@ -16,7 +16,7 @@ def show():
     
     # Hero Section
     st.markdown("""
-        <div style='background: linear-gradient(135deg, #003087 0%, #0047AB 100%); 
+        <div style='background: linear-gradient(135deg, #e14747 0%, #e14747 100%); 
                     padding: 3rem 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: center;'>
             <h1 style='color: white; font-size: 3rem; margin: 0; font-weight: 700;'>
                 Flight Booking Forecasting System
