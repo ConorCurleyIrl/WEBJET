@@ -306,7 +306,7 @@ def show():
         
         with col3:
             if st.button("➡️ Proceed to Deployment", type="primary", use_container_width=True):
-                st.session_state.current_page = "Business Insights & Deployment"
+                st.session_state.current_page = "Step 6 - Business Insights & Deployment"
                 st.rerun()
 
 

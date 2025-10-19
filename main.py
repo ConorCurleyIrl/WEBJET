@@ -12,7 +12,7 @@ st.set_page_config(
 
 # Initialize session state defaults
 if 'current_page' not in st.session_state:
-    st.session_state.current_page = "Business Overview"
+    st.session_state.current_page = "Business Case Overview"
 
 # Prevent stale data crashes
 if st.sidebar.button("🔄 Reset & Restart"):
@@ -63,9 +63,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Initialize session state
-if 'current_page' not in st.session_state:
-    st.session_state.current_page = "Data Acquisition"
+
 
 # Page mapping
 PAGES = {
@@ -82,7 +80,10 @@ PAGES = {
 # Sidebar
 with st.sidebar:
     # App logo and title
-    st.image("docs/logo.jpg", use_column_width=True)
+    try:
+        st.image("docs/logo.jpg", use_column_width=True)
+    except:
+        st.markdown("### ✈️")
     st.markdown("""
         <div style='text-align: center; padding: 1rem 0;'>
             <h1 style='color: #1f77b4; margin: 0;'>✈️ Webjet</h1>

@@ -210,7 +210,7 @@ def show():
     
     with col3:
         if st.button("➡️ Proceed to Preprocessing", type="primary", use_container_width=True):
-            st.session_state.current_page = "Preprocessing & Feature Engineering"
+            st.session_state.current_page = "Step 3 - Preprocessing & Feature Engineering"
             st.rerun()
 
 

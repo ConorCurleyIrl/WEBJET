@@ -275,7 +275,7 @@ Response: {
     
     with col3:
         if st.button("➡️ Proceed to MLOps", type="primary", use_container_width=True):
-            st.session_state.current_page = "MLOps & Monitoring"
+            st.session_state.current_page = "Step 7 - MLOps & Monitoring"
             st.rerun()
 
 

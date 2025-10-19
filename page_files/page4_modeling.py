@@ -243,7 +243,7 @@ def show():
         with col3:
             if st.button("➡️ Proceed to Forecasting", type="primary", use_container_width=True):
                 save_to_session('models', trained_models)
-                st.session_state.current_page = "Forecasting & Validation"
+                st.session_state.current_page = "Step 5 - Forecasting & Validation"
                 st.rerun()
 
 

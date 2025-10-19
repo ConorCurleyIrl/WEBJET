@@ -325,7 +325,7 @@ def show():
         st.markdown("<br>", unsafe_allow_html=True)
         
         if st.button("📊 Explore Full System", type="primary", use_container_width=True):
-            st.session_state.current_page = "Data Acquisition"
+            st.session_state.current_page = "Step 1 - Data Acquisition"
             st.rerun()
     
     st.markdown("---")

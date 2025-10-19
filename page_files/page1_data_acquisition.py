@@ -213,7 +213,7 @@ def show():
         
         with col3:
             if st.button("➡️ Proceed to EDA", type="primary", use_container_width=True):
-                st.session_state.current_page = "Exploratory Data Analysis"
+                st.session_state.current_page = "Step 2 - Exploratory Data Analysis"
                 st.rerun()
         
     else:

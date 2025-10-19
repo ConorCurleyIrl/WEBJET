@@ -92,6 +92,11 @@ def show():
                 'day_of_year': feat_day_of_year,
                 'week_of_year': feat_week_of_year
             }
+            # ADD THIS CHECK:
+            existing_features = [k for k, v in features.items() if v and k in data.columns]
+            if existing_features:
+                st.warning(f"⚠️ These features already exist: {existing_features}")
+                features = {k: v for k, v in features.items() if k not in data.columns}
             
             data = create_temporal_features(data, features)
             st.session_state.working_data = data
@@ -318,7 +323,7 @@ def show():
             save_to_session('preprocessed_data', data)
             save_to_session('working_data', data)
             st.success("✅ Data saved to session!")
-            st.session_state.current_page = "Model Training"
+            st.session_state.current_page = "Step 4 - Model Training"
             st.rerun()
 
 
