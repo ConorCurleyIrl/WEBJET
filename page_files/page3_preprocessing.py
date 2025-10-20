@@ -16,9 +16,26 @@ from utils.utils import check_data_loaded, save_to_session, load_from_session
 
 def show():
     """Display the Data Preprocessing & Feature Engineering page."""
-    
-    st.markdown("<h1 class='main-header'>🔧 Data Preprocessing & Feature Engineering</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='sub-header'>Transform raw data into model-ready features</p>", unsafe_allow_html=True)
+
+    col1,col2,col3 = st.columns([1,4,1])
+    with col2:
+        # Header
+        with st.container():
+            st.markdown("""
+                <div style='background: linear-gradient(135deg, #e14747 0%, #e14747 100%); 
+                            padding: 1rem 1rem; border-radius: 12px; margin-bottom: 1rem; text-align: center;'>
+                    <h1 style='color: white; font-size: 3rem; margin: 0; font-weight: 500;'>
+                        Step 3: 🔧 Data Preprocessing & Feature Engineering
+                    </h1>
+
+                </div>
+            """, unsafe_allow_html=True)
+            st.markdown("""
+            - In this step, you will preprocess the raw flight booking data to create model-ready features.
+            - Choose between a quick demo mode with one-click best practices or an advanced mode for custom configurations.
+            - Key preprocessing tasks include train/test splitting, temporal feature creation, lag features, rolling statistics, and handling missing values.
+                    """, unsafe_allow_html=True)
+  
     st.markdown("---")
     
     if not check_data_loaded('data'):
@@ -151,7 +168,7 @@ def show_advanced_mode():
             train_data, test_data, split_date = train_test_split_timeseries(data, test_size)
             save_to_session('train_data', train_data)
             save_to_session('test_data', test_data)
-            save_to_session('split_date', split_date)
+            save_to_session('split_date', split_date)  # This will now always be a pandas Timestamp
             st.success(f"✅ Split applied at {split_date.strftime('%Y-%m-%d')}")
     
     # Show split visualization if split exists
@@ -444,14 +461,21 @@ def train_test_split_timeseries(df, test_size=0.2):
     split_index = int(len(df) * (1 - test_size))
     train = df.iloc[:split_index].copy()
     test = df.iloc[split_index:].copy()
-    split_date = test['date'].iloc[0]
+    
+    # Ensure split_date is a proper pandas Timestamp
+    split_date = pd.Timestamp(test['date'].iloc[0])
     
     return train, test, split_date
-
 
 def create_split_timeline(data, split_date):
     """Create visualization showing train/test split."""
     fig = go.Figure()
+    
+    # Ensure split_date is a proper datetime object
+    if isinstance(split_date, str):
+        split_date = pd.to_datetime(split_date)
+    elif not isinstance(split_date, (pd.Timestamp, pd.DatetimeIndex)):
+        split_date = pd.Timestamp(split_date)
     
     train_data = data[data['date'] < split_date]
     test_data = data[data['date'] >= split_date]
@@ -476,9 +500,9 @@ def create_split_timeline(data, split_date):
         fillcolor='rgba(255, 152, 0, 0.1)'
     ))
     
-     
+    # Use the properly formatted datetime object
     fig.add_vline(
-        x=pd.Timestamp(split_date).strftime('%Y-%m-%d'),
+        x=split_date.isoformat(),  # Convert to string format
         line_dash="dash",
         line_color="red",
         annotation_text="Split Point",

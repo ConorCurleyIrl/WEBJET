@@ -31,8 +31,26 @@ from utils.utils import check_data_loaded, save_to_session, load_from_session
 def show():
     """Display the Model Training & Comparison page."""
     
-    st.markdown("<h1 class='main-header'>🤖 Model Training & Comparison</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='sub-header'>Train multiple models, compare performance, select best</p>", unsafe_allow_html=True)
+    st.markdown("<h1 class='main-header'></h1>", unsafe_allow_html=True)
+
+    col1,col2,col3 = st.columns([1,4,1])
+    with col2:
+        # Header
+        with st.container():
+            st.markdown("""
+                <div style='background: linear-gradient(135deg, #e14747 0%, #e14747 100%); 
+                            padding: 1rem 1rem; border-radius: 12px; margin-bottom: 1rem; text-align: center;'>
+                    <h1 style='color: white; font-size: 3rem; margin: 0; font-weight: 500;'>
+                        Step 4: 🤖 Model Training & Comparison
+                    </h1>
+
+                </div>
+            """, unsafe_allow_html=True)
+            st.markdown("""
+            - In this step, you will train multiple models on the preprocessed flight booking data.
+            - Choose from statistical models like ARIMA, Prophet, and Exponential Smoothing, as well as machine learning models like XGBoost, Random Forest, and LightGBM.
+            - After training, compare model performance using various metrics and visualizations to select the best model for forecasting.
+                    """, unsafe_allow_html=True)
     st.markdown("---")
     
     if not check_data_loaded('preprocessed_data'):
@@ -56,8 +74,6 @@ def show():
     
     with col1:
         st.markdown("**Statistical Models**")
-        st.caption("ARIMA is suitable for univariate time series with seasonality. Prophet handles holidays well. ETS captures trend and seasonality.")
-        use_arima = st.checkbox("ARIMA/SARIMA", value=True)
         st.caption("Prophet is robust to missing data and shifts in the trend.")
         use_prophet = st.checkbox("Prophet", value=True)
         st.caption("Exponential Smoothing is effective for data with trend and seasonality.")
@@ -88,7 +104,6 @@ def show():
         models_to_train = []
         if use_prophet: models_to_train.append('Prophet')
         if use_xgb: models_to_train.append('XGBoost')
-        if use_arima: models_to_train.append('ARIMA')
         if use_ets: models_to_train.append('ETS')
         if use_rf: models_to_train.append('Random Forest')
         if use_lgb: models_to_train.append('LightGBM')

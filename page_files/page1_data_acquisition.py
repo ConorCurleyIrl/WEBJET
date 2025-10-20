@@ -16,11 +16,24 @@ def show():
     """Display the Data Acquisition page."""
 
     # Header
-    st.markdown("<h1 class='main-header'>📁 Data Acquisition</h1>", unsafe_allow_html=True)
-    st.markdown(
-        "<p class='sub-header'>Load historical booking data and understand data structure</p>",
-        unsafe_allow_html=True
-    )
+    col1,col2,col3 = st.columns([1,4,1])
+    with col2:
+        # Header
+        with st.container():
+            st.markdown("""
+                <div style='background: linear-gradient(135deg, #e14747 0%, #e14747 100%); 
+                            padding: 1rem 1rem; border-radius: 12px; margin-bottom: 1rem; text-align: center;'>
+                    <h1 style='color: white; font-size: 3rem; margin: 0; font-weight: 500;'>
+                        Step 1: 📥 Data Acquisition
+                    </h1>
+
+                </div>
+            """, unsafe_allow_html=True)
+            st.markdown("""
+            - In this step, you will either generate synthetic flight booking data or upload your own historical bookings data in CSV format.
+            - The synthetic data simulates real-world patterns including seasonality, holidays, marketing effects, competitor pricing, and weather disruptions.
+            - After loading the data, you will see a preview, summary statistics, and quick visualizations to understand its structure and quality.
+                    """, unsafe_allow_html=True)
     st.markdown("---")
     
     # Data Source Selector
@@ -44,17 +57,17 @@ def show():
         with col1:
             start_date = st.date_input(
                 "Start Date",
-                value=datetime(2021, 1, 1),
+                value=datetime(2022, 10, 20),
                 min_value=datetime(2020, 1, 1),
-                max_value=datetime(2023, 12, 31)
+                max_value=datetime(2022, 10, 20)
             )
         
         with col2:
             end_date = st.date_input(
                 "End Date",
-                value=datetime(2024, 1, 31),
+                value=datetime(2025, 10, 19),
                 min_value=datetime(2020, 1, 1),
-                max_value=datetime(2024, 12, 31)
+                max_value=datetime(2025, 10, 19)
             )
         
         with col3:

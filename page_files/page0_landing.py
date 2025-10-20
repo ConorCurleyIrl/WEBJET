@@ -14,6 +14,8 @@ import numpy as np
 def show():
     """Display executive landing page."""
     
+    st.title("✈️ Webjet Flight Booking Forecasting System") 
+    st.info("This is an example of potential ML project deliverable for demonstration purposes only. Happy to dicsuss in more detail if needed.")
     # Hero Section
     with st.container():
         st.markdown("""
@@ -106,7 +108,7 @@ def show():
     
     st.markdown("### Quantified Business Value")
     
-    col1, col2 = st.columns([2, 1])
+    col1, col2 = st.columns([2, 1.5])
     
     with col1:
         # ROI visualization
@@ -114,34 +116,28 @@ def show():
         st.plotly_chart(fig_roi, use_container_width=True)
     
     with col2:
+        
+
         st.markdown("""
-        **Annual Benefits**
-        
-        💰 Marketing Savings  
-        **$2.1M** (20% efficiency)
-        
-        👥 Service Optimization  
-        **$450K** (15% reduction)
-        
-        📈 Revenue Protection  
-        **$280K** (capacity mgmt)
-        
-        ═══════════  
-        **Total: $2.83M/year**
-        
-        🎯 **ROI: 94,233%**  
-        (vs $3K annual cost)
-        """)
+        <div style='background: #FFF8DC; padding: 1.5rem; border-radius: 8px;'>
+            <h3 style='color: #FF6600; margin-top: 0;'>Annual Benefits</h3>
+            <p><strong>Marketing Savings:</strong> $2.1M (20% efficiency)</p>
+            <p><strong>Service Optimization:</strong> Customer Service Cost Reduction - $450K (15% efficiency)</p>
+            <p><strong>Revenue Protection:</strong> $280K (capacity management)</p>
+            <h4><strong>Total Annual Benefit:</strong> $2.83M</h4>    
+        </div>
+        """, unsafe_allow_html=True)
+
     
-    st.markdown("""
-    #### Supporting WebJet's Strategic Enablers for FY30 Goals
-    
-    1. **Double TTV by 2030** - Optimize every dollar of marketing spend to maximize booking volume
-    2. **'Go Somewhere' Platform** - AI tools create personalized experiences and better-value itineraries
-    3. **Market Leadership** - Maintain #1 position through data-driven competitive advantage
-    4. **Multi-Vertical Expansion** - Scale forecasting to hotels, packages, tours, business travel
-    5. **Customer Experience** - Support award-winning service with predictive capacity planning
-    """)
+        st.markdown("""
+        <div style='background: #E8F5E9; padding: 1.5rem; border-radius: 8px;'>
+            <h3 style='color: #2E7D32; margin-top: 0;'>Supporting WebJet's Strategic Enablers for FY30 Goals</h3>
+            <p><strong>1. Double TTV by 2030</strong>  - Optimize every dollar of marketing spend to maximize booking volume</p>
+            <p><strong>2. 'Go Somewhere' Platform</strong> - AI tools create personalized experiences and better-value itineraries</p>
+            <p><strong>3. Market Leadership</strong> - Maintain #1 position through data-driven competitive advantage</p>
+            <p><strong>4. Multi-Vertical Expansion</strong> - Scale forecasting to hotels, packages, tours, business travel</p>
+            <p><strong>5. Customer Experience</strong> - Support award-winning service with predictive capacity planning</p>
+        </div>""", unsafe_allow_html=True)
     
     st.markdown("---")
     
@@ -867,7 +863,7 @@ def create_roi_chart():
         title="Annual Value Breakdown",
         yaxis_title="Savings/Revenue ($K)",
         template='plotly_white',
-        height=300,
+        height=500,
         showlegend=False
     )
     

@@ -22,11 +22,26 @@ def show():
     """Display the Exploratory Data Analysis page."""
     
     # Header
-    st.markdown("<h1 class='main-header'>📊 Exploratory Data Analysis</h1>", unsafe_allow_html=True)
-    st.markdown(
-        "<p class='sub-header'>Deep understanding of patterns, seasonality, and anomalies</p>",
-        unsafe_allow_html=True
-    )
+    # Header
+    col1,col2,col3 = st.columns([1,4,1])
+    with col2:
+        # Header
+        with st.container():
+            st.markdown("""
+                <div style='background: linear-gradient(135deg, #e14747 0%, #e14747 100%); 
+                            padding: 1rem 1rem; border-radius: 12px; margin-bottom: 1rem; text-align: center;'>
+                    <h1 style='color: white; font-size: 3rem; margin: 0; font-weight: 500;'>
+                        Step 2: 📊 Exploratory Data Analysis
+                    </h1>
+
+                </div>
+            """, unsafe_allow_html=True)
+            st.markdown("""
+            - In this step, you will explore the loaded data to uncover insights and patterns.
+            - Visualizations will help identify trends, seasonality, and anomalies.
+            - Key statistics will provide a summary of the data's characteristics.
+            """, unsafe_allow_html=True)
+  
     st.markdown("---")
     
     # Check if data loaded
@@ -116,6 +131,10 @@ def show():
             1.5, 5.0, 3.0, 0.1,
             help="Z-score: typically 3. IQR: typically 1.5"
         )
+        st.caption("**Insight:** Adjust threshold based on business context and data distribution.")
+        st.caption("Higher threshold = fewer outliers detected.")
+        st.markdown("Z-score is defined as (X - mean) / std deviation. IQR is the range between Q1 and Q3.")
+        st.markdown("Z-score works well for normally distributed data, IQR is robust to non-normality.")
     
     with col2:
         outliers_df, fig_outliers = detect_and_plot_outliers(data, outlier_method, threshold)
@@ -154,6 +173,16 @@ def show():
     
     # 7. Stationarity Tests
     st.subheader("7️⃣ Stationarity Tests")
+    with st.expander("ℹ️ What is Stationarity?"):
+        st.markdown("""
+        A stationary time series has constant statistical properties (mean, variance) over time.
+        Many forecasting models assume stationarity for accurate predictions.
+        
+        - **Augmented Dickey-Fuller (ADF) Test:** Null hypothesis is that the series has a unit root (non-stationary).
+        - **KPSS Test:** Null hypothesis is that the series is stationary.
+        
+        Ideally, we want to reject the null in ADF and fail to reject in KPSS to confirm stationarity.
+        """)
     
     col1, col2 = st.columns(2)
     

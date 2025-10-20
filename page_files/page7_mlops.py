@@ -182,9 +182,9 @@ def show():
             st.warning("⚠️ Minimal improvement - Continue with current model")
     
     st.markdown("---")
-    
-    # 8. A/B Testing Framework
-    st.subheader("8️⃣ A/B Testing Framework")
+
+    # 8. Champion vs Contender Framework
+    st.subheader("8️⃣ Champion vs Contender Framework")
     
     col1, col2 = st.columns(2)
     with col1:

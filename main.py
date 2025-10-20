@@ -5,7 +5,7 @@ import importlib
 # Page configuration
 st.set_page_config(
     page_title="Webjet Flight Booking Forecasting",
-    page_icon="✈️",
+    page_icon="docs/logo.jpeg",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -37,7 +37,12 @@ ML_PAGES = {
 
 # Combined pages for navigation logic
 ALL_PAGES = {**BUSINESS_PAGES, **ML_PAGES}
-
+col1, col2 = st.columns([7, 1])
+with col2:
+    try:
+        st.image("docs/logo.png", use_column_width=True)
+    except:
+        st.markdown("### ✈️")
 # Sidebar
 with st.sidebar:
     # App logo and title
@@ -84,14 +89,16 @@ with st.sidebar:
     </style>
     """, unsafe_allow_html=True)
     
-    st.markdown("<div class='main-header'>Webjet Flight Booking Forecasting</div>", unsafe_allow_html=True)
-    
     col1, col2, col3 = st.columns([2, 1, 2])
     with col2:
         try:
             st.image("docs/logo.jpeg", use_column_width=True)
         except:
             st.markdown("### ✈️")
+
+    st.markdown("<div class='main-header'>Webjet Flight Booking Forecasting</div>", unsafe_allow_html=True)
+    
+    
     
     # Progress indicator based on current section
     if st.session_state.current_page in BUSINESS_PAGES:
@@ -110,7 +117,9 @@ with st.sidebar:
     """, unsafe_allow_html=True)
     
     # Business Overview Section
-    st.subheader("🎯 Business Stakeholders ",divider="rainbow")
+    st.subheader("🎯 Product & Marketing Stakeholders ",divider="rainbow")
+    
+
     for page_name in BUSINESS_PAGES.keys():
         is_selected = st.session_state.current_page == page_name
         if st.button(
@@ -122,7 +131,28 @@ with st.sidebar:
             st.rerun()
     
     # ML System Walkthrough Section
-    st.subheader("ML Engineers",divider="rainbow")
+    st.subheader("⚙️ ML System Walkthrough (Simplified)",divider="rainbow")
+    with st.expander("Notes for a real-world ML System"):
+        st.markdown("""
+        This is a simplified demo of an end-to-end ML system. In a real-world scenario, often it is not the technical implementation that is the most challenging part, but rather ensuring successful adoption and integration into business processes.
+                    
+        ### Real-life considerations for End Users & Stakeholders:
+        - Alignment with business goals
+        - User feedback loops
+        - Change management strategies
+        - Training and documentation
+        - Cross-functional collaboration
+
+        ### Technical Considerations(Not limited to):
+        - Data ingestion pipelines from multiple sources
+        - More Data validation and quality checks
+        - Advanced feature engineering
+        - Hyperparameter tuning and model selection
+        - Deployment pipelines and CI/CD integration
+        - Monitoring, alerting, and automated retraining
+        """, unsafe_allow_html=True)
+
+
     for page_name in ML_PAGES.keys():
         is_selected = st.session_state.current_page == page_name
         if st.button(
