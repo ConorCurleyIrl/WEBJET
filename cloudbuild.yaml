@@ -11,7 +11,7 @@ steps:
     args: ['push', 'australia-southeast1-docker.pkg.dev/webjet-demo/forecaster/forecaster:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'australia-southeast1-docker.pkg.dev/webjet-demo/forecaster/forecasterr:$BUILD_ID']
+    args: ['push', 'australia-southeast1-docker.pkg.dev/webjet-demo/forecaster/forecaster:$BUILD_ID']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
