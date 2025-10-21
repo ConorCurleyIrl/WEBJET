@@ -14,9 +14,12 @@ from utils.utils import (
 
 def show():
     """Display the Data Acquisition page."""
-
+    st.info("👈 Open sidebar to see the process steps")
     # Header
     col1,col2,col3 = st.columns([1,4,1])
+    with col1:
+        st.write("")
+        
     with col2:
         # Header
         with st.container():
